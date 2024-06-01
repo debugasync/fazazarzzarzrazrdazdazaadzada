@@ -140,23 +140,6 @@ get("player").new = function(self, player)
 	player.CharacterAdded:Connect(check)
 end
 
-get("player").remove = function(self, player)
-	print("removing", player)
-	if player:IsA("Player") then
-		local character = self:find(player)
-		if character then
-			self:remove(character)
-		end
-	else
-		local drawings = self.cache[player].drawings
-		self.cache[player] = nil
-
-		for _, drawing in pairs(drawings) do
-			drawing:Remove()
-		end
-	end
-end
-
 get("player").update = function(self, character, data)
 	if not self:check(character) then
 		self:remove(character)
@@ -218,7 +201,7 @@ get("player").update = function(self, character, data)
 			drawings.boxOutline.ZIndex = drawings.box.ZIndex - 1
 			drawings.boxFilled.ZIndex = drawings.boxOutline.ZIndex - 1
 
-			drawings.name.Text = player.Name
+			drawings.name.Text = player.Name .. " - " .. tostring(math.floor(data.distance)) .. "m"
 			drawings.name.Size = math.max(math.min(math.abs(12.5 * scale), 12.5), 10)
 			drawings.name.Position = Vector2.new(x, (yPostion - drawings.name.TextBounds.Y) - 2)
 			drawings.name.Color = color(visuals.names.color)
@@ -245,13 +228,6 @@ get("player").update = function(self, character, data)
 			drawings.healthText.OutlineColor = visuals.health.outline.color
 
 			drawings.healthOutline.ZIndex = drawings.health.ZIndex - 1
-
-			drawings.distance.Text = player.Name .. " - " .. tostring(math.floor(data.distance)) .. " studs"
-			drawings.distance.Size = math.max(math.min(math.abs(11 * scale), 11), 10)
-			drawings.distance.Position = Vector2.new(x, (yPostion + height) + (drawings.distance.TextBounds.Y * 0.25))
-			drawings.distance.Color = color(visuals.distance.color)
-			drawings.distance.Outline = visuals.distance.outline.enabled
-			drawings.distance.OutlineColor = visuals.distance.outline.color
 
 			drawings.weapon.Text = weapon
 			drawings.weapon.Size = math.max(math.min(math.abs(11 * scale), 11), 10)
